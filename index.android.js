@@ -16,25 +16,6 @@ var CIRCLE_SIZE = 80;
 var CIRCLE_COLOR = 'blue';
 var CIRCLE_HIGHLIGHT_COLOR = 'green';
 
-var MyClass = require('./MyClass.js');
-
-var Testi = React.createClass({
-
-  render: function() {
-    return (
-      <View style={styles.container}>
-        <View
-          ref={(circle) => {this.circle = circle;}}
-          style={styles.circle}
-
-          />
-        </View>
-
-
-    )
-  }
-
-});
 
 var Org_test2 = React.createClass({
 
@@ -74,9 +55,6 @@ var Org_test2 = React.createClass({
 
   },
 
-  componentDidMount: function() {
-
-  },
 
   render: function() {
     return (
@@ -100,7 +78,7 @@ var Org_test2 = React.createClass({
         </View>
 
 
-        {/* miten tähän omat animaatiohookit, koko paska kun toimii vaan 1 objektille */}
+        {/* miten tähän omat animaatiohookit, koko hoito kun toimii vaan 1 objektille */}
         <View style={styles.container}>
           <View ref={component => this.asd = component}{...this.props}
             style={styles.circle}
