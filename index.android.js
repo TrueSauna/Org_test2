@@ -1,51 +1,160 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- */
 'use strict';
-import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
 
-class Org_test2 extends Component {
-  render() {
+var React = require('react-native');
+var {
+  PanResponder,
+  StyleSheet,
+  View,
+  processColor,
+  AppRegistry,
+  Text,
+  ListView,
+  Picker,
+} = React;
+
+var CIRCLE_SIZE = 80;
+var CIRCLE_COLOR = 'blue';
+var CIRCLE_HIGHLIGHT_COLOR = 'green';
+
+var MyClass = require('./MyClass.js');
+
+var Testi = React.createClass({
+
+  render: function() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
+        <View
+          ref={(circle) => {this.circle = circle;}}
+          style={styles.circle}
+
+          />
+        </View>
+
+
+    )
+  }
+
+});
+
+var Org_test2 = React.createClass({
+
+  _panResponder: {},
+  _panResponder2: {},
+  _previousLeft: 0,
+  _previousTop: 0,
+  _circleStyles: {},
+
+  getInitialState: function(){
+    return{language:'1'};
+  },
+
+  componentWillUpdate: function(){
+
+  },
+
+  componentWillMount: function() {
+
+    this._panResponder = PanResponder.create({
+      onStartShouldSetPanResponder: this._handleStartShouldSetPanResponder,
+      onMoveShouldSetPanResponder: this._handleMoveShouldSetPanResponder,
+      onPanResponderGrant: this._handlePanResponderGrant,
+      onPanResponderMove: this._handlePanResponderMove,
+      onPanResponderRelease: this._handlePanResponderEnd,
+      onPanResponderTerminate: this._handlePanResponderEnd,
+    }),
+
+    this._previousLeft = 0;
+    this._previousTop = 20;
+    this._circleStyles = {
+      style: {
+        left: this._previousLeft,
+        top: this._previousTop
+      }
+    };
+
+  },
+
+  componentDidMount: function() {
+
+  },
+
+  render: function() {
+    return (
+
+      <View>
+        <Picker
+          selectedValue={this.state.language}
+          onValueChange={(lang) => this.setState({language: lang})}>
+            <Picker.Item label="Move" value="1" />
+            <Picker.Item label="Ghost" value="2" />
+            <Picker.Item label="Ghost with line" value="3" />
+            <Picker.Item label="No effect" value="4" />
+        </Picker>
+
+
+        <View style={styles.container}>
+          <View ref={component => this.asd = component}{...this.props}
+            style={styles.circle}
+            {...this._panResponder.panHandlers}>
+          </View>
+        </View>
+
+
+        {/* miten tähän omat animaatiohookit, koko paska kun toimii vaan 1 objektille */}
+        <View style={styles.container}>
+          <View ref={component => this.asd = component}{...this.props}
+            style={styles.circle}
+            {...this._panResponder.panHandlers}>
+          </View>
+        </View>
+
+
       </View>
     );
-  }
-}
+  },
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+  _handleStartShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
+    return true;
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+
+  _handleMoveShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
+    return true;
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+
+  _handlePanResponderMove: function(e: Object, gestureState: Object) {
+
+      this._circleStyles.style.left = this._previousLeft + gestureState.dx;
+      this._circleStyles.style.top = this._previousTop + gestureState.dy;
+      this.asd.setNativeProps(this._circleStyles);
+
+  },
+  _handlePanResponderEnd: function(e: Object, gestureState: Object) {
+
+      this._previousLeft += gestureState.dx;
+      this._previousTop += gestureState.dy;
+
   },
 });
+
+var styles = StyleSheet.create({
+  circle: {
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
+    borderRadius: CIRCLE_SIZE / 2,
+    backgroundColor: CIRCLE_COLOR,
+    position: 'absolute',
+    left: 0,
+    top: 0,
+  },
+  container: {
+    flex: 1,
+    paddingTop: 64,
+  },
+  container2: {
+    flex: 1,
+    paddingTop: 100,
+  },
+});
+
 
 AppRegistry.registerComponent('Org_test2', () => Org_test2);
