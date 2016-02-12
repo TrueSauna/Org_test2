@@ -78,7 +78,12 @@ var Org_test2 = React.createClass({
         </View>
 
 
-        {/* miten tähän omat animaatiohookit, koko hoito kun toimii vaan 1 objektille */}
+        {/* miten tähän omat animaatiohookit, koko hoito kun toimii vaan 1 objektille
+
+          https://facebook.github.io/react-native/docs/panresponder.html
+          http://blog.zmxv.com/2016/01/lets-write-a-mobile-game-with-react-native-part-2.html
+
+          */}
         <View style={styles.container}>
           <View ref={component => this.asd = component}{...this.props}
             style={styles.circle}
