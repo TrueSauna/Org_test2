@@ -10,6 +10,7 @@ var {
   Text,
   ListView,
   Picker,
+  Animated,
 } = React;
 
 var CIRCLE_SIZE = 80;
@@ -57,6 +58,9 @@ var Ball = React.createClass({
   _previousTop: 0,
   _circleStyles: {},
   _circleStylesShadow: {},
+  _lineStyles:{},
+
+
 
   componentWillUpdate: function(){
 
@@ -75,6 +79,11 @@ var Ball = React.createClass({
 
     this._previousLeft = 0;
     this._previousTop = 0;
+    this._lineWidth = 0;
+    this._lineHeight = 0;
+    this._rotationI = 0;
+    this._rotationS = '0'
+    this._transform = [{rotate:'{this._rotation}'}];
 
     this._circleStyles = {
       style: {
@@ -91,14 +100,22 @@ var Ball = React.createClass({
       }
     };
 
+    this._lineStyles = {
+      style:{
+        transform: this._transform,
+      }
+    };
+
   },
 
   render: function() {
 
-    var cShadow = this.props.method == '2' ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
+    var cShadow = this.props.method == '2' || this.props.method == '3' ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
+    var cLine = this.props.method == '3' ? <View style={styles.line} ref={component => this.Line = component}/>:null;
 
     return (
         <View style={styles.container}>
+          {cLine}
           <View ref={component => this.Cir = component}{...this.props}
             style={styles.circle}
             {...this._panResponder.panHandlers}>
@@ -118,10 +135,23 @@ var Ball = React.createClass({
 
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
 
+
+
     if(this.props.method == '1'){
       this._circleStyles.style.left = this._previousLeft + gestureState.dx;
       this._circleStyles.style.top = this._previousTop + gestureState.dy;
       this.Cir.setNativeProps(this._circleStyles);
+    }
+    else if(this.props.method == '2'){
+      this._circleStyles.style.left = this._previousLeft + gestureState.dx;
+      this._circleStyles.style.top = this._previousTop + gestureState.dy;
+
+      this._circleStylesShadow.style.opacity = 0.3;
+      this._circleStylesShadow.style.left = this._previousLeft;
+      this._circleStylesShadow.style.top = this._previousTop;
+
+      this.Cir.setNativeProps(this._circleStyles);
+      this.Cir2.setNativeProps(this._circleStylesShadow);
     }
     else {
       this._circleStyles.style.left = this._previousLeft + gestureState.dx;
@@ -133,6 +163,14 @@ var Ball = React.createClass({
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir2.setNativeProps(this._circleStylesShadow);
+
+      this._rotationI = this._rotationI + 2;
+      this._rotationS = this._rotationI.toString()+'deg';
+
+      this._lineStyles.style.transform=[{rotate:this._rotationS}];
+      this.Line.setNativeProps(this._lineStyles);
+
+      //  transform:[{rotate:'10deg'}],
     }
 
   },
@@ -149,21 +187,11 @@ var Ball = React.createClass({
 
       this._circleStylesShadow.style.opacity = 0;
       this.Cir2.setNativeProps(this._circleStylesShadow);
+      //this.Line.setNativeProps(this._lineStyles);
     }
-
   }
 });
 
-var createShadow = React.createClass({
-  render: function() {
-    return(
-      <View style={styles.container}>
-        <View style={styles.circleShadow}>
-        </View>
-      </View>
-    )
-  }
-});
 
 var styles = StyleSheet.create({
   circle: {
@@ -184,6 +212,11 @@ var styles = StyleSheet.create({
     left: 0,
     top: 100,
     opacity:0
+  },
+  line: {
+    height:1,
+    width:200,
+    backgroundColor:'#000000',
   },
   container: {
     flex: 1,
