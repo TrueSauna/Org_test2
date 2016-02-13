@@ -94,13 +94,16 @@ var Ball = React.createClass({
   },
 
   render: function() {
+
+    var cShadow = this.props.method == '2' ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
+
     return (
         <View style={styles.container}>
-          <View ref={component => this.asd = component}{...this.props}
+          <View ref={component => this.Cir = component}{...this.props}
             style={styles.circle}
             {...this._panResponder.panHandlers}>
           </View>
-          <View style={styles.circleShadow} ref={component => this.asd2 = component}></View>
+          {cShadow}
         </View>
     );
   },
@@ -118,19 +121,18 @@ var Ball = React.createClass({
     if(this.props.method == '1'){
       this._circleStyles.style.left = this._previousLeft + gestureState.dx;
       this._circleStyles.style.top = this._previousTop + gestureState.dy;
-      this.asd.setNativeProps(this._circleStyles);
+      this.Cir.setNativeProps(this._circleStyles);
     }
     else {
       this._circleStyles.style.left = this._previousLeft + gestureState.dx;
       this._circleStyles.style.top = this._previousTop + gestureState.dy;
 
-
       this._circleStylesShadow.style.opacity = 0.3;
       this._circleStylesShadow.style.left = this._previousLeft;
       this._circleStylesShadow.style.top = this._previousTop;
 
-      this.asd.setNativeProps(this._circleStyles);
-      this.asd2.setNativeProps(this._circleStylesShadow);
+      this.Cir.setNativeProps(this._circleStyles);
+      this.Cir2.setNativeProps(this._circleStylesShadow);
     }
 
   },
@@ -146,7 +148,7 @@ var Ball = React.createClass({
       this._previousTop += gestureState.dy;
 
       this._circleStylesShadow.style.opacity = 0;
-      this.asd2.setNativeProps(this._circleStylesShadow);
+      this.Cir2.setNativeProps(this._circleStylesShadow);
     }
 
   }
