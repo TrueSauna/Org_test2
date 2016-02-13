@@ -151,6 +151,7 @@ var Ball = React.createClass({
       this._circleStylesShadow.style.top = this._previousTop;
 
       this.Cir.setNativeProps(this._circleStyles);
+
       this.Cir2.setNativeProps(this._circleStylesShadow);
     }
     else {
