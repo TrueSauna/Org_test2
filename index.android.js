@@ -34,8 +34,8 @@ var Org_test2 = React.createClass({
           selectedValue={this.state.method}
           onValueChange={(lang) => this.setState({method: lang})}>
             <Picker.Item label="Move" value="1" />
-            <Picker.Item label="Ghost" value="2" />
-            <Picker.Item label="Ghost with line" value="3" />
+            <Picker.Item label="Shadow" value="2" />
+            <Picker.Item label="Shadow with line" value="3" />
             <Picker.Item label="No effect" value="4" />
         </Picker>
 
