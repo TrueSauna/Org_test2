@@ -16,7 +16,19 @@ var {
 var CIRCLE_SIZE = 80;
 var CIRCLE_COLOR = 'blue';
 var CIRCLE_HIGHLIGHT_COLOR = 'green';
+var LINE_WIDTH = 0;
+var LINE_HEIGHT = 5;
+var varTEST1 = null;
+var varTEST2 = null;
+var varTEST3 = null;
 
+var ReactART = require('ReactNativeART');
+
+var {
+  Surface,
+  Shape,
+  Path,
+}=ReactART;
 
 var Org_test2 = React.createClass({
 
@@ -36,7 +48,6 @@ var Org_test2 = React.createClass({
             <Picker.Item label="Move" value="1" />
             <Picker.Item label="Shadow" value="2" />
             <Picker.Item label="Shadow with line" value="3" />
-            <Picker.Item label="No effect" value="4" />
         </Picker>
 
         {/* drawing couple of balls with their animations */}
@@ -61,10 +72,17 @@ var Ball = React.createClass({
   _circleStylesShadow: {},
   _lineStyles:{},
 
+
+
   getInitialState: function(){
     //setting making showShadow-variable more useable
     //used for determining is ball's shadow is rendered or not (deleted if finger is lifted)
     return{showShadow:true};
+    return{showLine:true};
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return true;
   },
 
   componentWillUpdate: function(){
@@ -87,10 +105,9 @@ var Ball = React.createClass({
     this._previousLeft = 0;
     this._previousTop = 0;
     this._lineWidth = 0;
-    this._lineHeight = 0;
     this._rotationI = 0;
     this._rotationS = '0'
-    this._transform = [{rotate:'{this._rotation}'}];
+    //this._transform = [{rotate:'{this._rotation}'}];
 
     this._circleStyles = {
       style: {
@@ -101,15 +118,14 @@ var Ball = React.createClass({
 
     this._circleStylesShadow = {
       style: {
-        opacity:this.opacity,
-        left:this.left,
-        top:this.top,
+
       }
     };
 
     this._lineStyles = {
       style:{
-        transform: this._transform,
+        transform:[{rotate:''}],
+        width:this._lineWidth,
       }
     };
 
@@ -119,17 +135,29 @@ var Ball = React.createClass({
 
     //these var's are used for displaying (or not, depends the situation) shadows or lines
     //ref makes it possible to use setNativeProps on it
-    var cShadow = this.props.method == '2' && this.state.showShadow ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
+    var cShadow = (this.props.method == '2' || this.props.method == '3') && this.state.showShadow ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
+
+    {/* Line between shadow & current destination, animated real-time */}
     var cLine = this.props.method == '3' ? <View style={styles.line} ref={component => this.Line = component}/>:null;
 
     return (
         <View style={styles.container}>
           {/* shadow is drawn depending on showShadow's state */}
+          {cLine}
           {cShadow}
+
           <View ref={component => this.Cir = component}{...this.props}
             style={styles.circle}
             {...this._panResponder.panHandlers}>
+
+            {/*tests:*/}
+            <Text>{varTEST1}</Text>
+            <Text>{varTEST2}</Text>
+            <Text>{varTEST3}</Text>
+            {/*<Text>{numb.toFixed(3)}</Text>*/}
+            {/* <Text>{Math.round(Math.tan(1/4))}</Text>*/}
           </View>
+
 
         </View>
     );
@@ -148,52 +176,106 @@ var Ball = React.createClass({
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
 
     //Handling movement:
-    //setting coordinates and updatin circles
+    //setting coordinates and updating circles
     //swich case would be maybe better
     //move duplicated code to out of this if-else !!!!!!!!!!!!!!!!!! -> much simpler
+
+    this._circleStyles.style.left = this._previousLeft + gestureState.dx;
+    this._circleStyles.style.top = this._previousTop + gestureState.dy;
+
     if(this.props.method == '1'){
-      this._circleStyles.style.left = this._previousLeft + gestureState.dx;
-      this._circleStyles.style.top = this._previousTop + gestureState.dy;
       this.Cir.setNativeProps(this._circleStyles);
     }
-    else if(this.props.method == '2'){
-      this._circleStyles.style.left = this._previousLeft + gestureState.dx;
-      this._circleStyles.style.top = this._previousTop + gestureState.dy;
-
+    else if(this.props.method == '2' || this.props.method == '3'){
       //shadow's opacity and location (stays still) during movement:
       this._circleStylesShadow.style.opacity = 0.3;
       this._circleStylesShadow.style.left = this._previousLeft;
       this._circleStylesShadow.style.top = this._previousTop;
 
       //for "deleting" shadow:
-      this.setState({showShadow: true});
+      if(this.state.showShadow == false){
+        this.setState({showShadow: true});
+      }
 
-      //updates (incl. "delete" for shadow (Cir2)):
+      //updates
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir2.setNativeProps(this._circleStylesShadow);
 
     }
+    else{
+
+    }
+
     //line-action here
     //draws line between shadow and ball, NOT READY!
-    else {
-      this._circleStyles.style.left = this._previousLeft + gestureState.dx;
-      this._circleStyles.style.top = this._previousTop + gestureState.dy;
+    if(this.props.method == '3') {
 
-      this._circleStylesShadow.style.opacity = 0.5;
-      this._circleStylesShadow.style.left = this._previousLeft;
-      this._circleStylesShadow.style.top = this._previousTop;
+      if(this.state.showLine == false){
+        this.setState({showLine: true});
+      }
+      //var s_previousAngle = this._lineStyles.style.transform[0].rotate;
+      //var _previousAngle = (parseFloat(s_previousAngle.substring(0,s_previousAngle.indexOf('deg')))).toFixed(4);
+      var _cLeft = this._circleStyles.style.left;
+      var _cTop = this._circleStyles.style.top;
+      var _sLeft = this._circleStylesShadow.style.left;
+      var _sTop = this._circleStylesShadow.style.top;
 
-      this.Cir.setNativeProps(this._circleStyles);
-      this.Cir2.setNativeProps(this._circleStylesShadow);
+      //var x = (Math.sqrt(Math.pow(_sLeft, 2))) - (Math.sqrt(Math.pow(_cLeft,2)));
+      //var y = (Math.sqrt(Math.pow(_sTop, 2))) - (Math.sqrt(Math.pow(_cTop,2)));
+      var x = 0;
+      var y = 0;
+      var theta = 0;
+      //previous angle:
 
 
-      //this._rotationI = this._rotationI + 2;
-      //this._rotationS = this._rotationI.toString()+'deg';
+      //x = half-point for x of 2 points:
+      if(_sLeft < _cLeft){
+        x = _cLeft - (_cLeft - _sLeft)/2;
+      }
+      else {
+        x = _sLeft - (_sLeft - _cLeft)/2;
+      }
 
-      //this._lineStyles.style.transform=[{rotate:this._rotationS}];
-      //this.Line.setNativeProps(this._lineStyles);
+      //y = half-point for y of 2 points
+      if(_sTop < _cTop){
+        y = _cTop - (_cTop - _sTop)/2;
+      }
+      else{
+        y = _sTop - (_sTop - _cTop)/2;
+      }
 
-      //  transform:[{rotate:'10deg'}],
+      var a = _sTop - _cTop;
+      var b = _cLeft - _sLeft;
+
+      theta = Math.atan2(b, a) * 180 / Math.PI + 180; // range (-PI, PI]
+
+      //set to right place:
+
+      //weird calculation for position of the line:
+      //y seems to always have to be y + 40
+      //linewidth seems to affect the needed position for x
+      //if line lenght is 40, x have to be x + 20 and fo forth:
+      //40:  +20
+      //60:  +10
+      //80:   0
+      //100: -10
+      //120: -20
+      //140: -30
+      //160: -40
+      //180: -50
+      //200: -60
+
+      //varTEST3 = this._lineStyles.style.width;
+
+      this._lineStyles.style.width = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
+
+      this._lineStyles.style.top = y + 40 - LINE_HEIGHT;
+      this._lineStyles.style.left = x + (this._lineStyles.style.width/2-40)*-1;
+
+      this._lineStyles.style.transform = [{rotate:(theta-90).toString()+'deg'}];
+
+      this.Line.setNativeProps(this._lineStyles);
+
     }
 
   },
@@ -202,26 +284,25 @@ var Ball = React.createClass({
 
     //save cicle's coordinates where it was
 
+    this._previousLeft += gestureState.dx;
+    this._previousTop += gestureState.dy;
+
     if(this.props.method == '1'){
-      this._previousLeft += gestureState.dx;
-      this._previousTop += gestureState.dy;
-    }
-    else if(this.props.method == '2'){
-      this._previousLeft += gestureState.dx;
-      this._previousTop += gestureState.dy;
 
-      this._circleStylesShadow.style.opacity = 0.1;
-      this.setState({showShadow: false});
     }
-    else{
-      this._previousLeft += gestureState.dx;
-      this._previousTop += gestureState.dy;
-
+    else if(this.props.method == '2' || this.props.method == '3'){
       //"delete" shadow, opacity-change is for testing only, doesnt show
       this._circleStylesShadow.style.opacity = 0.1;
-      this.setState({showShadow: false});
+      if(this.state.showShadow == true){
+        this.setState({showShadow: false});
+      }
+    }
 
-      //this.Line.setNativeProps(this._lineStyles);
+
+    if(this.props.method == '3'){
+      if(this.state.showLine == true){
+        this.setState({showLine: false});
+      }
     }
   }
 });
@@ -236,6 +317,9 @@ var styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     top: 0,
+    borderColor:'#000000',
+    borderWidth:1,
+
   },
   circleShadow: {
     width: CIRCLE_SIZE,
@@ -244,12 +328,17 @@ var styles = StyleSheet.create({
     backgroundColor: CIRCLE_COLOR,
     position: 'absolute',
     left: 0,
-    top: 100,
-    opacity:0.1,
+    top: 0,
+    opacity:0,
+    borderColor:'#000000',
+    borderWidth:1,
   },
   line: {
-    height:1,
-    width:200,
+    height:LINE_HEIGHT,
+    width:LINE_WIDTH,
+    position: 'absolute',
+    left: 0,
+    top: 0,
     backgroundColor:'#000000',
   },
   container: {
