@@ -178,9 +178,8 @@ var Ball = React.createClass({
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
 
     //Handling movement:
-    //setting coordinates and updating circles
+    //setting coordinates and updating circles && lines
     //swich case would be maybe better
-    //move duplicated code to out of this if-else !!!!!!!!!!!!!!!!!! -> much simpler
 
     this._circleStyles.style.left = this._previousLeft + gestureState.dx;
     this._circleStyles.style.top = this._previousTop + gestureState.dy;
