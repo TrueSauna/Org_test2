@@ -77,11 +77,14 @@ var Ball = React.createClass({
   getInitialState: function(){
     //setting making showShadow-variable more useable
     //used for determining is ball's shadow is rendered or not (deleted if finger is lifted)
-    return{showShadow:true};
-    return{showLine:true};
+    return{
+      showShadow:true,
+      showLine:true
+    };
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
+    //not used
     return true;
   },
 
@@ -107,7 +110,6 @@ var Ball = React.createClass({
     this._lineWidth = 0;
     this._rotationI = 0;
     this._rotationS = '0'
-    //this._transform = [{rotate:'{this._rotation}'}];
 
     this._circleStyles = {
       style: {
@@ -118,7 +120,7 @@ var Ball = React.createClass({
 
     this._circleStylesShadow = {
       style: {
-
+        //not used
       }
     };
 
@@ -138,7 +140,7 @@ var Ball = React.createClass({
     var cShadow = (this.props.method == '2' || this.props.method == '3') && this.state.showShadow ? <View style={styles.circleShadow} ref={component => this.Cir2 = component}/>:null;
 
     {/* Line between shadow & current destination, animated real-time */}
-    var cLine = this.props.method == '3' ? <View style={styles.line} ref={component => this.Line = component}/>:null;
+    var cLine = this.props.method == '3' && this.state.showLine ? <View style={styles.line} ref={component => this.Line = component}/>:null;
 
     return (
         <View style={styles.container}>
@@ -150,7 +152,7 @@ var Ball = React.createClass({
             style={styles.circle}
             {...this._panResponder.panHandlers}>
 
-            {/*tests:*/}
+            {/*tests (not used atm):*/}
             <Text>{varTEST1}</Text>
             <Text>{varTEST2}</Text>
             <Text>{varTEST3}</Text>
@@ -186,7 +188,8 @@ var Ball = React.createClass({
     if(this.props.method == '1'){
       this.Cir.setNativeProps(this._circleStyles);
     }
-    else if(this.props.method == '2' || this.props.method == '3'){
+
+    if(this.props.method == '2' || this.props.method == '3'){
       //shadow's opacity and location (stays still) during movement:
       this._circleStylesShadow.style.opacity = 0.3;
       this._circleStylesShadow.style.left = this._previousLeft;
@@ -202,9 +205,6 @@ var Ball = React.createClass({
       this.Cir2.setNativeProps(this._circleStylesShadow);
 
     }
-    else{
-
-    }
 
     //line-action here
     //draws line between shadow and ball, NOT READY!
@@ -213,6 +213,7 @@ var Ball = React.createClass({
       if(this.state.showLine == false){
         this.setState({showLine: true});
       }
+      //ill keep these comments here if needed somewhere
       //var s_previousAngle = this._lineStyles.style.transform[0].rotate;
       //var _previousAngle = (parseFloat(s_previousAngle.substring(0,s_previousAngle.indexOf('deg')))).toFixed(4);
       var _cLeft = this._circleStyles.style.left;
@@ -220,13 +221,15 @@ var Ball = React.createClass({
       var _sLeft = this._circleStylesShadow.style.left;
       var _sTop = this._circleStylesShadow.style.top;
 
+      //ill keep these comments here if needed somewhere, sqrt = squareroot & pow is in x potence, returns real nro
       //var x = (Math.sqrt(Math.pow(_sLeft, 2))) - (Math.sqrt(Math.pow(_cLeft,2)));
       //var y = (Math.sqrt(Math.pow(_sTop, 2))) - (Math.sqrt(Math.pow(_cTop,2)));
+
+      //x, y are points for the center of the line
+      //theta is the angle of the line
       var x = 0;
       var y = 0;
       var theta = 0;
-      //previous angle:
-
 
       //x = half-point for x of 2 points:
       if(_sLeft < _cLeft){
@@ -244,17 +247,17 @@ var Ball = React.createClass({
         y = _sTop - (_sTop - _cTop)/2;
       }
 
+      //a & b are used for measuring the length of the line
       var a = _sTop - _cTop;
       var b = _cLeft - _sLeft;
 
-      theta = Math.atan2(b, a) * 180 / Math.PI + 180; // range (-PI, PI]
+      theta = Math.atan2(b, a) * 180 / Math.PI + 180; // range (-PI, PI] + 180 -> 0 - 360
 
       //set to right place:
-
       //weird calculation for position of the line:
       //y seems to always have to be y + 40
       //linewidth seems to affect the needed position for x
-      //if line lenght is 40, x have to be x + 20 and fo forth:
+      //if line lenght is 40, x have to be x + 20 and fo forth (*):
       //40:  +20
       //60:  +10
       //80:   0
@@ -264,18 +267,24 @@ var Ball = React.createClass({
       //160: -40
       //180: -50
       //200: -60
+      //apparently rotation happends from the middle of the line (ofcource), so the startingpoint has to be always corrected to the right place
 
       //varTEST3 = this._lineStyles.style.width;
 
+      //hypotenuse (length of the line, length between of the shadow & ball):
       this._lineStyles.style.width = Math.sqrt(Math.pow(a,2) + Math.pow(b,2));
 
+      //y seems to vary if the line_height is changed so to correct this:
+      //+40 is try-error value
       this._lineStyles.style.top = y + 40 - LINE_HEIGHT;
+
+      //width/2-40 is directed from the list above (*)
       this._lineStyles.style.left = x + (this._lineStyles.style.width/2-40)*-1;
 
+      //-90 is neede to turn the line to its correct angle
       this._lineStyles.style.transform = [{rotate:(theta-90).toString()+'deg'}];
 
       this.Line.setNativeProps(this._lineStyles);
-
     }
 
   },
@@ -283,16 +292,15 @@ var Ball = React.createClass({
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
 
     //save cicle's coordinates where it was
-
     this._previousLeft += gestureState.dx;
     this._previousTop += gestureState.dy;
 
     if(this.props.method == '1'){
 
     }
-    else if(this.props.method == '2' || this.props.method == '3'){
+
+    if(this.props.method == '2' || this.props.method == '3'){
       //"delete" shadow, opacity-change is for testing only, doesnt show
-      this._circleStylesShadow.style.opacity = 0.1;
       if(this.state.showShadow == true){
         this.setState({showShadow: false});
       }
