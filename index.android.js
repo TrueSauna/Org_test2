@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react-native');
+
 var {
   PanResponder,
   StyleSheet,
@@ -11,6 +12,7 @@ var {
   ListView,
   Picker,
   Animated,
+  Dimensions,
 } = React;
 
 var CIRCLE_SIZE = 80;
@@ -21,7 +23,9 @@ var LINE_HEIGHT = 5;
 var varTEST1 = null;
 var varTEST2 = null;
 var varTEST3 = null;
+var LINE_COUNT = 2;
 
+//for advanced animations, not use atm
 var ReactART = require('ReactNativeART');
 
 var {
@@ -34,12 +38,21 @@ var Org_test2 = React.createClass({
 
   //default value for picker-component
   getInitialState: function(){
-    return{method:'1'};
+    return{
+      method:'1',
+    };
+  },
+
+  getBackgroundCoordinates(){
+
   },
 
   render: function() {
     return (
       <View>
+
+        {/* draws grid for the background */}
+        <BackgroundLines lineCount={LINE_COUNT}></BackgroundLines>
 
         {/* Picker for determining animating method for teh ballls */}
         <Picker
@@ -60,6 +73,45 @@ var Org_test2 = React.createClass({
       </View>
     )
   }
+});
+
+//returns views for backgroundlines
+var BackgroundLines  = React.createClass({
+
+  //width:Dimensions.get('window').width, top:Dimensions.get('window').height/2
+  //height:Dimensions.get('window').height, left:Dimensions.get('window').width/2
+
+
+  render: function(){
+
+    var lineCount = parseInt(this.props.lineCount);
+    var id = 0;
+
+    var height = Dimensions.get('window').height;
+    var width = Dimensions.get('window').width;
+    var verticalSegment = height/(lineCount+1);
+    var horizontalSegment = width/(lineCount+1);
+
+
+    var _backLines = [];
+
+    //horizontal lines:
+    for(var i = 1; i <= lineCount; i++){
+      _backLines.push(<View style={{position: 'absolute', top:verticalSegment*i, height:1, width:width, backgroundColor:'black'}} key={id}></View>);
+      id++;
+    }
+
+    //vertical lines:
+    for(var i = 1; i <= lineCount; i++){
+      _backLines.push(<View style={{position: 'absolute', left:horizontalSegment*i, height:height, width:1, backgroundColor:'black'}} key={id}></View>);
+      id++;
+    }
+
+    return (
+        <View>{_backLines}</View>
+    )
+  }
+
 });
 
 var Ball = React.createClass({
@@ -355,6 +407,23 @@ var styles = StyleSheet.create({
   container2: {
     flex: 1,
     paddingTop: 0,
+  },
+  backScreen:{
+    top: 0,
+    backgroundColor:'#000000',
+    height:1,
+  },
+  backLine1:{
+    position: 'absolute',
+    backgroundColor:'black',
+    height:1,
+    width:Dimensions.get('window').width, top:Dimensions.get('window').height/2
+  },
+  backLine2:{
+    position: 'absolute',
+    backgroundColor:'black',
+    width:1,
+    height:Dimensions.get('window').height, left:Dimensions.get('window').width/2
   },
 });
 
