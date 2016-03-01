@@ -38,16 +38,15 @@ var Org_test2 = React.createClass({
 
   //default value for picker-component
   getInitialState: function(){
+
     return{
       method:'1',
     };
   },
 
-  getBackgroundCoordinates(){
-
-  },
 
   render: function() {
+
     return (
       <View>
 
@@ -64,7 +63,7 @@ var Org_test2 = React.createClass({
         </Picker>
 
         {/* drawing couple of balls with their animations */}
-        <Ball method={this.state.method}>
+        <Ball method={this.state.method} >
         </Ball>
 
         <Ball method={this.state.method}>
@@ -124,7 +123,41 @@ var Ball = React.createClass({
   _circleStylesShadow: {},
   _lineStyles:{},
 
+  getCoordinatesForSnap: function(){
 
+    /*
+    var lineCount = parseInt(LINE_COUNT)
+    var id = 0;
+
+    var height = Dimensions.get('window').height;
+    var width = Dimensions.get('window').width;
+    var verticalSegment = height/(LINE_COUNT+1);
+    var horizontalSegment = width/(LINE_COUNT+1);
+    var _coordinates = [];
+
+    var i = 0;
+    var j = 0;
+
+    for(i = 0; i <= LINE_COUNT; i++){
+
+      _coordinates[i] = [];
+      //height
+      for(j = 0; j <= LINE_COUNT; j++){
+        //width
+        //_coordinates[i].push([]);
+        //_coordinates[i] = _coordinates2[j];
+        _coordinates[i].push(j);
+        varTEST3 = _coordinates[i];
+        varTEST1 = 'testi';
+      }
+
+    }
+    return true;
+    */
+
+    varTEST3 = 'testi1';
+    return true;
+  },
 
   getInitialState: function(){
     //setting making showShadow-variable more useable
@@ -156,6 +189,7 @@ var Ball = React.createClass({
       onPanResponderTerminate: this._handlePanResponderEnd,
     }),
 
+    this.getCoordinatesForSnap();
     //variables for current ball
     this._previousLeft = 0;
     this._previousTop = 0;
@@ -232,12 +266,18 @@ var Ball = React.createClass({
     //Handling movement:
     //setting coordinates and updating circles && lines
     //swich case would be maybe better
+    
 
     this._circleStyles.style.left = this._previousLeft + gestureState.dx;
     this._circleStyles.style.top = this._previousTop + gestureState.dy;
+    this.getCoordinatesForSnap();
+
+
 
     if(this.props.method == '1'){
+      //this.setState({showShadow: false});
       this.Cir.setNativeProps(this._circleStyles);
+
     }
 
     if(this.props.method == '2' || this.props.method == '3'){
@@ -338,6 +378,7 @@ var Ball = React.createClass({
       this.Line.setNativeProps(this._lineStyles);
     }
 
+
   },
 
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
@@ -363,8 +404,12 @@ var Ball = React.createClass({
         this.setState({showLine: false});
       }
     }
-  }
+  },
+
+
 });
+
+
 
 //styles
 var styles = StyleSheet.create({
