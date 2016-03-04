@@ -20,10 +20,11 @@ var CIRCLE_COLOR = 'blue';
 var CIRCLE_HIGHLIGHT_COLOR = 'green';
 var LINE_WIDTH = 0;
 var LINE_HEIGHT = 5;
-var varTEST1 = null;
-var varTEST2 = null;
-var varTEST3 = null;
+var varTEST1;
+var varTEST2;
+var varTEST3;
 var LINE_COUNT = 2;
+var COORDINATES_TO_LOCK = {};
 
 //for advanced animations, not use atm
 var ReactART = require('ReactNativeART');
@@ -41,7 +42,70 @@ var Org_test2 = React.createClass({
 
     return{
       method:'1',
+      COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
+  },
+
+  getCoordinatesForSnap: function(){
+
+    var lineCount = parseInt(LINE_COUNT)
+    var id = 0;
+
+    var height = Dimensions.get('window').height;
+    var width = Dimensions.get('window').width;
+    var verticalSegment = height/(LINE_COUNT+1);
+    var horizontalSegment = width/(LINE_COUNT+1);
+    var coordinates = [];
+
+    //var testCoordinates = [[1,2,3],[4,5,6],[7,8,9]];
+
+    var i = 0;
+    var j = 0;
+
+    for(i = 0; i <= LINE_COUNT; i++){
+
+      coordinates[i] = [];
+
+      for(j = 0; j <= LINE_COUNT; j++){
+
+
+        if(j==0){
+          /*
+             a b c
+             | | |
+          1 -0 0 0
+          2 -0 0 0
+          3 -0 0 0
+
+          */
+
+          //1 & a
+          coordinates[i].push((verticalSegment/2 + (horizontalSegment * i)).toFixed(2));
+          coordinates[i].push((horizontalSegment/2).toFixed(2));
+        }
+        else{
+          //everything else, row 1 and column a are only meaningful ones
+          coordinates[i].push((horizontalSegment/2 + (horizontalSegment * j)).toFixed(2));
+        }
+      }
+    }
+
+    //for visual tests:
+    var k = 0;
+    var l = 0;
+
+    for(k = 0; k < coordinates.length; k++){
+      if(k == 0){
+        varTEST1 = coordinates[k];
+      }
+      else{
+        varTEST1 += coordinates[k];
+      }
+      varTEST1 += '\n';
+    }
+
+
+    return coordinates;
   },
 
 
@@ -68,7 +132,9 @@ var Org_test2 = React.createClass({
 
         <Ball method={this.state.method}>
         </Ball>
-
+        <Text style={{top:100}}>{varTEST1}</Text>
+        <Text>{varTEST2}</Text>
+        <Text>{varTEST3}</Text>
       </View>
     )
   }
@@ -122,42 +188,8 @@ var Ball = React.createClass({
   _circleStyles: {},
   _circleStylesShadow: {},
   _lineStyles:{},
+  _coordinates:{},
 
-  getCoordinatesForSnap: function(){
-
-    /*
-    var lineCount = parseInt(LINE_COUNT)
-    var id = 0;
-
-    var height = Dimensions.get('window').height;
-    var width = Dimensions.get('window').width;
-    var verticalSegment = height/(LINE_COUNT+1);
-    var horizontalSegment = width/(LINE_COUNT+1);
-    var _coordinates = [];
-
-    var i = 0;
-    var j = 0;
-
-    for(i = 0; i <= LINE_COUNT; i++){
-
-      _coordinates[i] = [];
-      //height
-      for(j = 0; j <= LINE_COUNT; j++){
-        //width
-        //_coordinates[i].push([]);
-        //_coordinates[i] = _coordinates2[j];
-        _coordinates[i].push(j);
-        varTEST3 = _coordinates[i];
-        varTEST1 = 'testi';
-      }
-
-    }
-    return true;
-    */
-
-    varTEST3 = 'testi1';
-    return true;
-  },
 
   getInitialState: function(){
     //setting making showShadow-variable more useable
@@ -168,7 +200,7 @@ var Ball = React.createClass({
     };
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+   shouldComponentUpdate: function(nextProps, nextState) {
     //not used
     return true;
   },
@@ -189,13 +221,15 @@ var Ball = React.createClass({
       onPanResponderTerminate: this._handlePanResponderEnd,
     }),
 
-    this.getCoordinatesForSnap();
+
+    //varTEST1 = this._coordinates[0].toString();
     //variables for current ball
     this._previousLeft = 0;
     this._previousTop = 0;
     this._lineWidth = 0;
     this._rotationI = 0;
     this._rotationS = '0'
+
 
     this._circleStyles = {
       style: {
@@ -239,9 +273,7 @@ var Ball = React.createClass({
             {...this._panResponder.panHandlers}>
 
             {/*tests (not used atm):*/}
-            <Text>{varTEST1}</Text>
-            <Text>{varTEST2}</Text>
-            <Text>{varTEST3}</Text>
+
             {/*<Text>{numb.toFixed(3)}</Text>*/}
             {/* <Text>{Math.round(Math.tan(1/4))}</Text>*/}
           </View>
@@ -263,19 +295,29 @@ var Ball = React.createClass({
 
   _handlePanResponderMove: function(e: Object, gestureState: Object) {
 
-    //Handling movement:
-    //setting coordinates and updating circles && lines
-    //swich case would be maybe better
-    
 
+    //tests for using custom function with logic
+    //not working correctly unless some kind of setstate is declared
+    //-> when picker is set to 1 (this.props.method == '1')
+
+    /*
+    this._coordinates = this.getCoordinatesForSnap();
+
+    varTEST1 = this._coordinates[0].toString();
+
+    for(var j = 0; j <= this._coordinates.length; j++){
+      varTEST3 = 'testi ' + varTEST3;
+    }
+    */
+    //varTEST3++;
+    //this.setState({});
+    //set coordinates for the moving circle
     this._circleStyles.style.left = this._previousLeft + gestureState.dx;
     this._circleStyles.style.top = this._previousTop + gestureState.dy;
-    this.getCoordinatesForSnap();
-
-
 
     if(this.props.method == '1'){
       //this.setState({showShadow: false});
+
       this.Cir.setNativeProps(this._circleStyles);
 
     }
@@ -398,10 +440,11 @@ var Ball = React.createClass({
       }
     }
 
-
     if(this.props.method == '3'){
       if(this.state.showLine == true){
+
         this.setState({showLine: false});
+
       }
     }
   },
