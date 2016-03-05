@@ -90,21 +90,26 @@ var Org_test2 = React.createClass({
       }
     }
 
+
     //for visual tests:
     var k = 0;
     var l = 0;
 
     for(k = 0; k < coordinates.length; k++){
-      if(k == 0){
-        varTEST1 = coordinates[k];
+      for(l = 0; l < coordinates[k].length; l++){
+        if(k == 0 && l == 0){
+          varTEST1 = coordinates[k][l] + ' ';
+        }
+        else{
+          varTEST1 += coordinates[k][l] + ' ';
+        }
       }
-      else{
-        varTEST1 += coordinates[k];
-      }
+
       varTEST1 += '\n';
     }
-
-
+    varTEST3 = coordinates.length;
+    COORDINATES_TO_LOCK = coordinates;
+    varTEST3 += ' ' + COORDINATES_TO_LOCK[0][0];
     return coordinates;
   },
 
@@ -124,6 +129,7 @@ var Org_test2 = React.createClass({
             <Picker.Item label="Move" value="1" />
             <Picker.Item label="Shadow" value="2" />
             <Picker.Item label="Shadow with line" value="3" />
+            <Picker.Item label="Lock" value="4" />
         </Picker>
 
         {/* drawing couple of balls with their animations */}
@@ -132,6 +138,7 @@ var Org_test2 = React.createClass({
 
         <Ball method={this.state.method}>
         </Ball>
+
         <Text style={{top:100}}>{varTEST1}</Text>
         <Text>{varTEST2}</Text>
         <Text>{varTEST3}</Text>
@@ -187,8 +194,10 @@ var Ball = React.createClass({
   _previousTop: 0,
   _circleStyles: {},
   _circleStylesShadow: {},
+  _circleStylesSnapShadow:{},
   _lineStyles:{},
   _coordinates:{},
+
 
 
   getInitialState: function(){
@@ -196,7 +205,8 @@ var Ball = React.createClass({
     //used for determining is ball's shadow is rendered or not (deleted if finger is lifted)
     return{
       showShadow:true,
-      showLine:true
+      showLine:true,
+      showSnapShadow:true,
     };
   },
 
@@ -229,18 +239,19 @@ var Ball = React.createClass({
     this._lineWidth = 0;
     this._rotationI = 0;
     this._rotationS = '0'
+    this._previousLeftSnap = 0;
+    this._previousTopSnap = 0;
 
 
     this._circleStyles = {
       style: {
-        left: this._previousLeft,
-        top: this._previousTop
+
       }
     };
 
     this._circleStylesShadow = {
       style: {
-        //not used
+
       }
     };
 
@@ -248,6 +259,12 @@ var Ball = React.createClass({
       style:{
         transform:[{rotate:''}],
         width:this._lineWidth,
+      }
+    };
+
+    this._circleStylesSnapShadow = {
+      style: {
+
       }
     };
 
@@ -262,11 +279,14 @@ var Ball = React.createClass({
     {/* Line between shadow & current destination, animated real-time */}
     var cLine = this.props.method == '3' && this.state.showLine ? <View style={styles.line} ref={component => this.Line = component}/>:null;
 
+    var cSnapShadow = this.props.method == '4' && this.state.showSnapShadow ? <View style={styles.circleSnapShadow} ref={component => this.Cir3 = component}/>:null;
+
     return (
         <View style={styles.container}>
-          {/* shadow is drawn depending on showShadow's state */}
+          {/* shadows and lines are drawn depending on showShadow's state */}
           {cLine}
           {cShadow}
+          {cSnapShadow}
 
           <View ref={component => this.Cir = component}{...this.props}
             style={styles.circle}
@@ -277,8 +297,6 @@ var Ball = React.createClass({
             {/*<Text>{numb.toFixed(3)}</Text>*/}
             {/* <Text>{Math.round(Math.tan(1/4))}</Text>*/}
           </View>
-
-
         </View>
     );
   },
@@ -328,7 +346,7 @@ var Ball = React.createClass({
       this._circleStylesShadow.style.left = this._previousLeft;
       this._circleStylesShadow.style.top = this._previousTop;
 
-      //for "deleting" shadow:
+      //for revealing shadow:
       if(this.state.showShadow == false){
         this.setState({showShadow: true});
       }
@@ -420,7 +438,19 @@ var Ball = React.createClass({
       this.Line.setNativeProps(this._lineStyles);
     }
 
+    //green shadow to lock-grid
+    if(this.props.method == '4'){
 
+      if(this.state.showSnapShadow == false){
+        this.setState({showSnapShadow: true});
+      }
+
+      this._circleStylesSnapShadow.style.left = parseFloat(COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.top = parseFloat(COORDINATES_TO_LOCK[0][0]);
+
+      this.Cir.setNativeProps(this._circleStyles);
+      this.Cir3.setNativeProps(this._circleStylesSnapShadow);
+    }
   },
 
   _handlePanResponderEnd: function(e: Object, gestureState: Object) {
@@ -446,6 +476,13 @@ var Ball = React.createClass({
         this.setState({showLine: false});
 
       }
+    }
+
+    if(this.props.method == '4'){
+      if(this.state.showSnapShadow == true){
+        this.setState({showSnapShadow: false});
+      }
+
     }
   },
 
@@ -477,6 +514,18 @@ var styles = StyleSheet.create({
     left: 0,
     top: 0,
     opacity:0,
+    borderColor:'#000000',
+    borderWidth:1,
+  },
+  circleSnapShadow: {
+    width: CIRCLE_SIZE,
+    height: CIRCLE_SIZE,
+    borderRadius: CIRCLE_SIZE / 2,
+    backgroundColor: 'green',
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    opacity:0.5,
     borderColor:'#000000',
     borderWidth:1,
   },
