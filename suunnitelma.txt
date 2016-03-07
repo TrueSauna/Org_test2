@@ -21,11 +21,10 @@ Jaetaan n‰yttˆalue x * y ruudukkoon
 		o	Kun liike lopetetaan, pallo siirtyy l‰himp‰‰n ruutuun
 		o	L‰himm‰ss‰ ruudussa n‰ytet‰‰n toinen varjo (eri v‰ri?), mihin pallo on menossa, kun liike lopetetaan
 			?	lukituskoordinaatit taulukossa?
-			?	onmove-toiminnossa tarkistetaan mik‰ koordinaatti l‰himp‰n‰ -> varjo siihen -> kun liike loppuu, siirret‰‰n pallo l‰himp‰‰n koordinaattiin
-			?	lukituskoordinaatit taulukossa?
-			?	onmove-toiminnossa tarkistetaan koko ajan mik‰ koordinaatti l‰himp‰n‰ -> varjo siihen -> kun liike loppuu, siirret‰‰n pallo l‰himp‰‰n îaktiiviseenî koordinaattiin
-			?	
-			?	
+			?	onmove-toiminnossa tarkistetaan koko ajan mik‰ koordinaatti l‰himp‰n‰ -> varjo siihen -> kun liike loppuu, 
+				siirret‰‰n pallo l‰himp‰‰n îaktiiviseenî koordinaattiin
+				
+				
 	-	Ruutugrafiikalle checkbox
 
 3) 
