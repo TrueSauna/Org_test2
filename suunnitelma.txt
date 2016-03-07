@@ -1,0 +1,47 @@
+ORG_TEST2
+1)
+
+Alasvetovalikko, jossa toiminnot seuraaville:
+	-	Perustoiminto
+		o	Pallot liikkuvat kosketuseleiden mukaan
+	-	Varjot
+		o	Pallot liikkuvat, kuten edell‰, mutta j‰tt‰v‰t varjon liikkeellel‰htˆpaikalle
+		o	Kun liike lopetetaan varjo h‰vi‰‰, myˆs entiteettin‰
+	-	Viivat
+		o	Kuten edell‰, mutta liikuttaessa palloa, varjon ja liikutettavan pallon v‰lille piirret‰‰n viiva
+		o	Viiva h‰vi‰‰, kun liike lopetetaan. Kts. Varjot.
+		o	Toteutettu transform:rotate, ei îpiirt‰m‰ll‰î viivaa
+
+2)
+
+Jaetaan n‰yttˆalue x * y ruudukkoon
+	-	Ruutugrafiikka
+	-	Alasvetovalikkoon rivi ruutulogiikalle
+		o	Ruutulogiikka lukitsee siirrett‰v‰n pallon l‰himp‰‰n ruutuun.
+		o	Kun liike lopetetaan, pallo siirtyy l‰himp‰‰n ruutuun
+		o	L‰himm‰ss‰ ruudussa n‰ytet‰‰n toinen varjo (eri v‰ri?), mihin pallo on menossa, kun liike lopetetaan
+			?	lukituskoordinaatit taulukossa?
+			?	onmove-toiminnossa tarkistetaan mik‰ koordinaatti l‰himp‰n‰ -> varjo siihen -> kun liike loppuu, siirret‰‰n pallo l‰himp‰‰n koordinaattiin
+			?	lukituskoordinaatit taulukossa?
+			?	onmove-toiminnossa tarkistetaan koko ajan mik‰ koordinaatti l‰himp‰n‰ -> varjo siihen -> kun liike loppuu, siirret‰‰n pallo l‰himp‰‰n îaktiiviseenî koordinaattiin
+			?	
+			?	
+	-	Ruutugrafiikalle checkbox
+
+3) 
+
+Viivan toteuttaminen ReactArt-kokonaisuuden avulla
+	-	Mahdollista?
+
+4)
+
+Pallojen korvaaminen bittikartoilla ja taustan lis‰ys
+
+5)
+Bittikarttojen animointi
+
+	-	Gif
+	-	FrametoFrame ñanimointi eri kuvilla
+
+6) îylisuurenî taustan vieritt‰minen
+
