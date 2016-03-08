@@ -204,9 +204,9 @@ var Ball = React.createClass({
     //setting making showShadow-variable more useable
     //used for determining is ball's shadow is rendered or not (deleted if finger is lifted)
     return{
-      showShadow:true,
-      showLine:true,
-      showSnapShadow:true,
+      showShadow:false,
+      showLine:false,
+      showSnapShadow:false,
     };
   },
 
