@@ -13,6 +13,7 @@ var {
   Picker,
   Animated,
   Dimensions,
+  Display,
 } = React;
 
 var CIRCLE_SIZE = 80;
@@ -35,6 +36,10 @@ var {
   Path,
 }=ReactART;
 
+const ExtraDimensions = require('react-native-extra-dimensions-android');
+
+const window = Dimensions.get('window');
+
 var Org_test2 = React.createClass({
 
   //default value for picker-component
@@ -56,6 +61,8 @@ var Org_test2 = React.createClass({
     var verticalSegment = height/(LINE_COUNT+1);
     var horizontalSegment = width/(LINE_COUNT+1);
     var coordinates = [];
+
+    varTEST2 = height.toFixed(2) + ' ' + width.toFixed(2) + '\n';
 
     //var testCoordinates = [[1,2,3],[4,5,6],[7,8,9]];
 
@@ -80,7 +87,7 @@ var Org_test2 = React.createClass({
           */
 
           //1 & a
-          coordinates[i].push((verticalSegment/2 + (horizontalSegment * i)).toFixed(2));
+          coordinates[i].push((verticalSegment/2 + (verticalSegment * i)).toFixed(2));
           coordinates[i].push((horizontalSegment/2).toFixed(2));
         }
         else{
@@ -107,9 +114,11 @@ var Org_test2 = React.createClass({
 
       varTEST1 += '\n';
     }
+
+
     varTEST3 = coordinates.length;
     COORDINATES_TO_LOCK = coordinates;
-    varTEST3 += ' ' + COORDINATES_TO_LOCK[0][0];
+
     return coordinates;
   },
 
@@ -123,7 +132,7 @@ var Org_test2 = React.createClass({
         <BackgroundLines lineCount={LINE_COUNT}></BackgroundLines>
 
         {/* Picker for determining animating method for teh ballls */}
-        <Picker
+        <Picker style={{position:'absolute'}}
           selectedValue={this.state.method}
           onValueChange={(lang) => this.setState({method: lang})}>
             <Picker.Item label="Move" value="1" />
@@ -159,6 +168,9 @@ var BackgroundLines  = React.createClass({
     var lineCount = parseInt(this.props.lineCount);
     var id = 0;
 
+    //varTEST2 += ' ,' + height2;
+    //int screenHeight = getResources().getDisplayMetrics().heightPixels;
+    //int screenWidth = getResources().getDisplayMetrics().widthPixels;
     var height = Dimensions.get('window').height;
     var width = Dimensions.get('window').width;
     var verticalSegment = height/(lineCount+1);
@@ -175,7 +187,7 @@ var BackgroundLines  = React.createClass({
 
     //vertical lines:
     for(var i = 1; i <= lineCount; i++){
-      _backLines.push(<View style={{position: 'absolute', left:horizontalSegment*i, height:height, width:1, backgroundColor:'black'}} key={id}></View>);
+      _backLines.push(<View style={{position: 'absolute', left:horizontalSegment*i, height:height-24, width:1, backgroundColor:'black'}} key={id}></View>);
       id++;
     }
 
@@ -283,6 +295,8 @@ var Ball = React.createClass({
 
     return (
         <View style={styles.container}>
+          <Text style={{ color: 'white' }}>STATUS_BAR_HEIGHT ({ExtraDimensions.get('STATUS_BAR_HEIGHT')})</Text>
+          <Text>REAL_WINDOW_HEIGHT ({ExtraDimensions.get('REAL_WINDOW_HEIGHT')})</Text>
           {/* shadows and lines are drawn depending on showShadow's state */}
           {cLine}
           {cShadow}
@@ -298,7 +312,6 @@ var Ball = React.createClass({
             {/* <Text>{Math.round(Math.tan(1/4))}</Text>*/}
           </View>
         </View>
-    );
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
@@ -445,8 +458,8 @@ var Ball = React.createClass({
         this.setState({showSnapShadow: true});
       }
 
-      this._circleStylesSnapShadow.style.left = parseFloat(COORDINATES_TO_LOCK[0][0]);
-      this._circleStylesSnapShadow.style.top = parseFloat(COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.left = parseFloat(COORDINATES_TO_LOCK[2][1]) - CIRCLE_SIZE/2;
+      this._circleStylesSnapShadow.style.top = parseFloat(COORDINATES_TO_LOCK[2][0]) - CIRCLE_SIZE+20;
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir3.setNativeProps(this._circleStylesSnapShadow);
@@ -540,6 +553,7 @@ var styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 0,
+    position: 'absolute',
   },
   container2: {
     flex: 1,
