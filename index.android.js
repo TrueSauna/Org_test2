@@ -16,6 +16,15 @@ var {
   Display,
 } = React;
 
+const ExtraDimensions = require('react-native-extra-dimensions-android');
+
+const window = Dimensions.get('window');
+
+/*
+<Text style={{ color: 'white' }}>STATUS_BAR_HEIGHT ({ExtraDimensions.get('STATUS_BAR_HEIGHT')})</Text>
+<Text>REAL_WINDOW_HEIGHT ({ExtraDimensions.get('REAL_WINDOW_HEIGHT')})</Text>
+*/
+
 var CIRCLE_SIZE = 80;
 var CIRCLE_COLOR = 'blue';
 var CIRCLE_HIGHLIGHT_COLOR = 'green';
@@ -35,10 +44,6 @@ var {
   Shape,
   Path,
 }=ReactART;
-
-const ExtraDimensions = require('react-native-extra-dimensions-android');
-
-const window = Dimensions.get('window');
 
 var Org_test2 = React.createClass({
 
@@ -130,6 +135,8 @@ var Org_test2 = React.createClass({
 
         {/* draws grid for the background */}
         <BackgroundLines lineCount={LINE_COUNT}></BackgroundLines>
+
+        <Text style={{ color: 'green' }}>STATUS_BAR_HEIGHT ({ExtraDimensions.get('STATUS_BAR_HEIGHT')})</Text>
 
         {/* Picker for determining animating method for teh ballls */}
         <Picker style={{position:'absolute'}}
@@ -295,8 +302,6 @@ var Ball = React.createClass({
 
     return (
         <View style={styles.container}>
-          <Text style={{ color: 'white' }}>STATUS_BAR_HEIGHT ({ExtraDimensions.get('STATUS_BAR_HEIGHT')})</Text>
-          <Text>REAL_WINDOW_HEIGHT ({ExtraDimensions.get('REAL_WINDOW_HEIGHT')})</Text>
           {/* shadows and lines are drawn depending on showShadow's state */}
           {cLine}
           {cShadow}
@@ -312,6 +317,7 @@ var Ball = React.createClass({
             {/* <Text>{Math.round(Math.tan(1/4))}</Text>*/}
           </View>
         </View>
+    );
   },
 
   _handleStartShouldSetPanResponder: function(e: Object, gestureState: Object): boolean {
