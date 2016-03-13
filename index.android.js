@@ -26,7 +26,7 @@ var Globals = require('./Globals.js');
 //var LINE_WIDTH = 0;
 //var LINE_HEIGHT = 5;
 //var LINE_COUNT = 2;
-//var COORDINATES_TO_LOCK = {};
+var COORDINATES_TO_LOCK = {};
 
 var varTEST1;
 var varTEST2;
@@ -47,9 +47,11 @@ var Org_test2 = React.createClass({
   //default value for picker-component
   getInitialState: function(){
 
+    this.getCoordinatesForSnap()
+    
     return{
       method:'1',
-      COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
+      //COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
   },
 
@@ -115,8 +117,9 @@ var Org_test2 = React.createClass({
       varTEST1 += '\n';
     }
     varTEST3 = coordinates.length;
-    this.setState({COORDINATES_TO_LOCK: coordinates});  //COORDINATES_TO_LOCK = coordinates;
-    //varTEST3 += ' ' + {this.state.COORDINATES_TO_LOCK}[0][0];
+    //this.setState({COORDINATES_TO_LOCK: coordinates});  
+    COORDINATES_TO_LOCK = coordinates;
+    varTEST3 += ' ' + COORDINATES_TO_LOCK[0][0]; //{this.state.props.COORDINATES_TO_LOCK[0][0]};
     return coordinates;
   },
 
@@ -140,10 +143,10 @@ var Org_test2 = React.createClass({
         </Picker>
 
         {/* drawing couple of balls with their animations */}
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.COORDINATES_TO_LOCK}>
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={COORDINATES_TO_LOCK}>
         </Ball>
 
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.COORDINATES_TO_LOCK}>
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={COORDINATES_TO_LOCK}>
         </Ball>
 
         <Text style={{top:100}}>{varTEST1}</Text>
