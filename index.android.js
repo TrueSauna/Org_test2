@@ -47,7 +47,7 @@ var Org_test2 = React.createClass({
   //default value for picker-component
   getInitialState: function(){
 
-    this.getCoordinatesForSnap()
+    this.getCoordinatesForSnap();
     
     return{
       method:'1',
