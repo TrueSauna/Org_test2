@@ -1,16 +1,16 @@
 var React = require('react-native');
 
 var {
-  PanResponder,
-  StyleSheet,
-  View,
-  processColor,
-  AppRegistry,
-  Text,
-  ListView,
-  Picker,
-  Animated,
-  Dimensions,
+//  PanResponder,
+//  StyleSheet,
+    View,
+//  processColor,
+//  AppRegistry,
+//  Text,
+//  ListView,
+//  Picker,
+//  Animated,
+    Dimensions,
 } = React;
 
 var BackgroundLines  = React.createClass({
