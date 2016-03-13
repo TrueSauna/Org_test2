@@ -301,8 +301,8 @@ var Ball = React.createClass({
         this.setState({showSnapShadow: true});
       }
 
-      this._circleStylesSnapShadow.style.left = parseFloat(Globals.COORDINATES_TO_LOCK[0][0]);
-      this._circleStylesSnapShadow.style.top = parseFloat(Globals.COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.left = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.top = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir3.setNativeProps(this._circleStylesSnapShadow);

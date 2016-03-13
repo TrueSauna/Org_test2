@@ -5,5 +5,4 @@ module.exports = {
      LINE_WIDTH: 0,
      LINE_HEIGHT: 5,
      LINE_COUNT: 2,
-     COORDINATES_TO_LOCK: {},
 };

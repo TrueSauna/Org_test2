@@ -115,8 +115,8 @@ var Org_test2 = React.createClass({
       varTEST1 += '\n';
     }
     varTEST3 = coordinates.length;
-    Globals.COORDINATES_TO_LOCK = coordinates;
-    varTEST3 += ' ' + Globals.COORDINATES_TO_LOCK[0][0];
+    this.setState({COORDINATES_TO_LOCK: coordinates});  //COORDINATES_TO_LOCK = coordinates;
+    //varTEST3 += ' ' + {this.state.COORDINATES_TO_LOCK}[0][0];
     return coordinates;
   },
 
@@ -140,10 +140,10 @@ var Org_test2 = React.createClass({
         </Picker>
 
         {/* drawing couple of balls with their animations */}
-        <Ball method={this.state.method} >
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.COORDINATES_TO_LOCK}>
         </Ball>
 
-        <Ball method={this.state.method}>
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.COORDINATES_TO_LOCK}>
         </Ball>
 
         <Text style={{top:100}}>{varTEST1}</Text>
