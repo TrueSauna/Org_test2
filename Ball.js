@@ -283,7 +283,7 @@ var Ball = React.createClass({
 
       //y seems to vary if the line_height is changed so to correct this:
       //+40 is try-error value
-      this._lineStyles.style.top = y + 40 - LINE_HEIGHT;
+      this._lineStyles.style.top = y + 40 - Globals.LINE_HEIGHT;
 
       //width/2-40 is directed from the list above (*)
       this._lineStyles.style.left = x + (this._lineStyles.style.width/2-40)*-1;
@@ -301,8 +301,8 @@ var Ball = React.createClass({
         this.setState({showSnapShadow: true});
       }
 
-      this._circleStylesSnapShadow.style.left = parseFloat(COORDINATES_TO_LOCK[0][0]);
-      this._circleStylesSnapShadow.style.top = parseFloat(COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.left = parseFloat(Globals.COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.top = parseFloat(Globals.COORDINATES_TO_LOCK[0][0]);
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir3.setNativeProps(this._circleStylesSnapShadow);
