@@ -18,7 +18,7 @@ var {
 var BackgroundLines = require('./BackgroundLines.js');
 var Ball = require('./Ball.js');
 var Globals = require('./Globals.js');
-    
+
 
 //var CIRCLE_SIZE = 80;
 //var CIRCLE_COLOR = 'blue';
@@ -31,7 +31,7 @@ var COORDINATES_TO_LOCK = {};
 var varTEST1;
 var varTEST2;
 var varTEST3;
-    
+
 
 //for advanced animations, not use atm
 var ReactART = require('ReactNativeART');
@@ -47,18 +47,25 @@ var Org_test2 = React.createClass({
   //default value for picker-component
   getInitialState: function(){
 
-    this.getCoordinatesForSnap()
-    
+
+
     return{
       method:'1',
+      coordTest:20,
       //COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
   },
 
+  componentWillMount: function(){
+    this.getCoordinatesForSnap()
+  },
+
   getCoordinatesForSnap: function(){
 
-    var lineCount = parseInt(Globals.LINE_COUNT)
+    var lineCount = parseInt(this.props.lineCount);
     var id = 0;
+    //var onload = this.props.onload;
+    //varTEST2 = 'test2: ' + onload;
 
     var height = Dimensions.get('window').height;
     var width = Dimensions.get('window').width;
@@ -117,9 +124,12 @@ var Org_test2 = React.createClass({
       varTEST1 += '\n';
     }
     varTEST3 = coordinates.length;
-    //this.setState({COORDINATES_TO_LOCK: coordinates});  
-    COORDINATES_TO_LOCK = coordinates;
-    varTEST3 += ' ' + COORDINATES_TO_LOCK[0][0]; //{this.state.props.COORDINATES_TO_LOCK[0][0]};
+    //this.setState({COORDINATES_TO_LOCK: coordinates});
+    //COORDINATES_TO_LOCK = coordinates;
+
+    this.setState({coordTest:coordinates});
+
+    //varTEST3 += ' test3: ' + this.state.coordTest;
     return coordinates;
   },
 
@@ -129,7 +139,8 @@ var Org_test2 = React.createClass({
     return (
       <View>
 
-        {/* draws grid for the background */}
+        {/* draws grid for the background...
+          can onloadstart be done better?*/}
         <BackgroundLines lineCount={Globals.LINE_COUNT}></BackgroundLines>
 
         {/* Picker for determining animating method for teh ballls */}
@@ -143,10 +154,10 @@ var Org_test2 = React.createClass({
         </Picker>
 
         {/* drawing couple of balls with their animations */}
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={COORDINATES_TO_LOCK}>
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.coordTest}>
         </Ball>
 
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={COORDINATES_TO_LOCK}>
+        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.coordTest}>
         </Ball>
 
         <Text style={{top:100}}>{varTEST1}</Text>

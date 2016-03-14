@@ -15,8 +15,8 @@ var {
   Dimensions,
 } = React;
 
-var Globals = require('./Globals.js');    
-    
+var Globals = require('./Globals.js');
+
 //var BackgroundLines = require('./BackgroundLines.js');
 //
 //var CIRCLE_SIZE = 80;
@@ -38,9 +38,9 @@ var {
   Shape,
   Path,
 }=ReactART;*/
-    
-    
-    
+
+
+
 
 var Ball = React.createClass({
 
@@ -302,7 +302,9 @@ var Ball = React.createClass({
       }
 
       this._circleStylesSnapShadow.style.left = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
-      this._circleStylesSnapShadow.style.top = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
+      this._circleStylesSnapShadow.style.top = parseFloat(this.props.COORDINATES_TO_LOCK[0][1]);
+      //this._circleStylesSnapShadow.style.top = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
+
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir3.setNativeProps(this._circleStylesSnapShadow);
@@ -344,8 +346,8 @@ var Ball = React.createClass({
 
 
 });
-    
-    
+
+
 //styles
 var styles = StyleSheet.create({
   circle: {
