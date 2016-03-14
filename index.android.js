@@ -49,12 +49,15 @@ var Org_test2 = React.createClass({
 
     return{
       method:'1',
+      
+      //xx---
       coordTest:{},
       //COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
   },
 
   componentWillMount: function(){
+    //xx---
     this.getCoordinatesForSnap()
   },
 
@@ -125,6 +128,7 @@ var Org_test2 = React.createClass({
     //this.setState({COORDINATES_TO_LOCK: coordinates});
     //COORDINATES_TO_LOCK = coordinates;
 
+    //xx---
     this.setState({coordTest:coordinates});
 
     //varTEST3 += ' test3: ' + this.state.coordTest;
