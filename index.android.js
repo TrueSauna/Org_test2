@@ -49,7 +49,7 @@ var Org_test2 = React.createClass({
 
     return{
       method:'1',
-      coordTest:0,
+      coordTest:{},
       //COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
   },
