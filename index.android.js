@@ -26,7 +26,7 @@ var Globals = require('./Globals.js');
 //var LINE_WIDTH = 0;
 //var LINE_HEIGHT = 5;
 //var LINE_COUNT = 2;
-var COORDINATES_TO_LOCK = {};
+//var COORDINATES_TO_LOCK = {};
 
 var varTEST1;
 var varTEST2;
@@ -49,9 +49,9 @@ var Org_test2 = React.createClass({
 
     return{
       method:'1',
-      
+
       //xx---
-      coordTest:{},
+      stateCoordinates:{},
       //COORDINATES_TO_LOCK: this.getCoordinatesForSnap(),
     };
   },
@@ -129,7 +129,7 @@ var Org_test2 = React.createClass({
     //COORDINATES_TO_LOCK = coordinates;
 
     //xx---
-    this.setState({coordTest:coordinates});
+    this.setState({stateCoordinates:coordinates});
 
     //varTEST3 += ' test3: ' + this.state.coordTest;
     return coordinates;
@@ -156,10 +156,10 @@ var Org_test2 = React.createClass({
         </Picker>
 
         {/* drawing couple of balls with their animations */}
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.coordTest}>
+        <Ball method={this.state.method} lockCoordinates={this.state.stateCoordinates}>
         </Ball>
 
-        <Ball method={this.state.method} COORDINATES_TO_LOCK={this.state.coordTest}>
+        <Ball method={this.state.method} lockCoordinates={this.state.stateCoordinates}>
         </Ball>
 
         <Text style={{top:100}}>{varTEST1}</Text>
