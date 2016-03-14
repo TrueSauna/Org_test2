@@ -165,6 +165,9 @@ var Org_test2 = React.createClass({
         <Text style={{top:100}}>{varTEST1}</Text>
         <Text>{varTEST2}</Text>
         <Text>{varTEST3}</Text>
+
+          {/* should change if changed in ball?? */}  
+        <Text style={{top:300}}>{this.state.stateCoordinates.length}</Text>
       </View>
     )
   }

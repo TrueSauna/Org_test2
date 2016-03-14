@@ -186,6 +186,7 @@ var Ball = React.createClass({
     //varTEST3++;
     //this.setState({});
     //set coordinates for the moving circle
+
     this._circleStyles.style.left = this._previousLeft + gestureState.dx;
     this._circleStyles.style.top = this._previousTop + gestureState.dy;
 
@@ -227,6 +228,7 @@ var Ball = React.createClass({
       var _cTop = this._circleStyles.style.top;
       var _sLeft = this._circleStylesShadow.style.left;
       var _sTop = this._circleStylesShadow.style.top;
+
 
       //ill keep these comments here if needed somewhere, sqrt = squareroot & pow is in x potence, returns real nro
       //var x = (Math.sqrt(Math.pow(_sLeft, 2))) - (Math.sqrt(Math.pow(_cLeft,2)));
@@ -303,8 +305,15 @@ var Ball = React.createClass({
 
       this._circleStylesSnapShadow.style.left = parseFloat(this.props.lockCoordinates[0][0]);
       this._circleStylesSnapShadow.style.top = parseFloat(this.props.lockCoordinates[0][1]);
+
+      var coordsBack = this.props.lockCoordinates;
+      coordsBack.push(11);
+
       //this._circleStylesSnapShadow.style.top = parseFloat(this.props.COORDINATES_TO_LOCK[0][0]);
 
+      //this.props.lockCoordinates[0][0]=100;
+
+      this.setState({lockCoordinates:coordsBack});
 
       this.Cir.setNativeProps(this._circleStyles);
       this.Cir3.setNativeProps(this._circleStylesSnapShadow);
